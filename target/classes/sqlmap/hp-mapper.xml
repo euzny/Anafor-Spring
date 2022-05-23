@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hp.mapper">
+
+	<select id="detailmap" resultType="hp.Hp_infoVO">
+		select  hp.* ,START_M,END_M,START_T,END_T,
+		START_W,END_W,START_TH,END_TH,START_F,END_F,
+		START_S,END_S,START_SU,END_SU,
+		LUNCH_D,LUNCH_W,CLOSE_SU,CLOSE_HO 
+		from hp
+		left outer join hp_time 
+		on  hp.hp_code = hp_time.hp_code 
+		where hp_name like '%'||#{place_name}||'%' and hp_tel like '%'||#{phone}||'%'
+	</select>
+
+
+</mapper>

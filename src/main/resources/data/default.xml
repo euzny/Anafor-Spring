@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- context 외부 파일을 사용할 수 있도록 경로를 설정 -->
+	<context:property-placeholder location="classpath:data/db.properties" />
+
+	<!-- DBCP를 이용하여 db.properties에 담긴 정보를 가져오는 bean을 생성 -->
+	<bean id="dbcp" class="org.apache.commons.dbcp.BasicDataSource">
+	<!-- id를 지정하면 다른 bean에서 참조할 수 있음 -->
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+	</bean>
+	
+	<!-- myBatis 등록하는 빈 -->
+	<!-- DB연결, 쿼리문 연결 -->
+	<bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dbcp" />
+		<property name="mapperLocations" value="classpath:sqlmap/*-mapper.xml"></property>
+	</bean>
+	
+	<!-- 쿼리문 실행의 기능을 가진 빈(class) -->
+	<bean class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="factory" />
+		<!--  여기부분이 있어야 @어노테이션 @qualifier 됩니당; -->
+		<qualifier value="ateam" />
+	</bean>
+	
+
+</beans>
+

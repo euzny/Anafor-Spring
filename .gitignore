@@ -1,0 +1,13 @@
+app/build
+.idea/
+.gradle/
+*/target/*
+/bin/
+/test.exe
+.settings/
+src/test/
+.classpath
+.project
+.springBeans
+/Servers/
+.metadata/

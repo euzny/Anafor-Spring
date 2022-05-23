@@ -1,0 +1,22 @@
+package user;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class UserDAO {
+	
+	@Autowired @Qualifier("ateam") private SqlSession sql;
+	
+	public UserVO login(UserVO inputVo) {
+		UserVO vo = sql.selectOne("user.mapper.login",inputVo);
+		return vo;
+	}
+	
+	public void join(UserVO vo) {
+		sql.insert("user.mapper.join",vo);
+	}
+	
+}
