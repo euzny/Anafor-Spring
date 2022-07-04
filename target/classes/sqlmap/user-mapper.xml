@@ -3,31 +3,55 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="user.mapper">
 
-   <update id="update">
-      update anafor_user
-      set user_pw=#{user_pw}, user_name=#{user_name}, user_tel=#{user_tel}, user_birth=#{user_birth}, user_gender=#{user_gender} 
-      where user_id =#{user_id}
-   </update>
-
-   <delete id="delete">
-      delete from anafor_user
-      where user_id = #{user_id}
-   </delete>
-
-	<insert id="join">
-		insert into anafor_user (user_id, user_pw, user_name, user_tel, user_birth, user_gender) 
-		values (#{user_id},#{user_pw},#{user_name},#{user_tel},#{user_birth},#{user_gender})
-	</insert>
-
 	<select id="login" resultType="user.UserVO">
-		select *
-		from ANAFOR_USER
+		select * from anafor_user
 		where user_id = #{user_id}
 		and user_pw = #{user_pw}
 	</select>
 	
+	<insert id="join">
+		insert into anafor_user (user_id, user_pw, user_name, user_tel, user_birth, user_gender) 
+		values (#{user_id},#{user_pw},#{user_name},#{user_tel},#{user_birth},#{user_gender})
+	</insert>
+	
+	<select id="id_chk" resultType="integer">
+		select count(*) from anafor_user
+		where user_id = #{user_id}
+	</select>
+		
+	<update id="update">
+		update anafor_user
+		set user_pw=#{user_pw}, user_name=#{user_name}, user_tel=#{user_tel}, user_birth=#{user_birth}, user_gender=#{user_gender} 
+		where user_id =#{user_id}
+	</update>	
+
+	<delete id="delete">
+		delete from anafor_user
+		where user_id = #{user_id}
+	</delete>
+
 	<select id="search" resultType="hp.hpVO">
 		select * from hp where hp_name like '%'||#{keyword}||'%' and sido_name ='광주'
 	</select>
-
+	
+	<select id="id_chk2" resultType="integer">
+		select count(*) from anafor_user
+		where user_id = #{user_id}
+	</select>
+	
+	<update id="pw_find">
+		update anafor_user
+		set user_pw=#{user_pw}
+		where user_id =#{user_id}
+	</update>		
+	
+	<select id="social" resultType="user.UserVO">
+		select * from anafor_user
+		where user_id = #{user_id}
+	</select>
+	
+	<insert id="socialJoin">
+		insert into anafor_user (user_id, user_pw, user_name, user_gender) 
+		values (#{user_id},#{user_id},#{user_name},#{user_gender})
+	</insert>
 </mapper>

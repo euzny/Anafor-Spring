@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+       
+<tiles-definitions>
+	<definition name="mypage_layout" template="/WEB-INF/views/tiles/mypage_layout.jsp">
+		<put-attribute name="mymenu" value="/WEB-INF/views/include/mymenu.jsp" />	
+	</definition>
+	
+	<definition name="mypage/*" extends="mypage_layout">
+		<put-attribute name="content" value="/WEB-INF/views/mypage/{1}.jsp" />	
+	</definition>
+	
+	<definition name="my_*/*" extends="mypage_layout">
+		<put-attribute name="content" value="/WEB-INF/views/my_{1}/{2}.jsp" />	
+	</definition>
+	
+	<definition name="admin_layout" template="/WEB-INF/views/tiles/admin_layout.jsp">
+		<put-attribute name="menu" value="/WEB-INF/views/include/menu.jsp" />	
+	</definition>
+	
+	<definition name="admin_*/*" extends="admin_layout">
+		<put-attribute name="content" value="/WEB-INF/views/admin_{1}/{2}.jsp" />	
+	</definition>
+	
+	<definition name="layout" template="/WEB-INF/views/tiles/layout.jsp">
+		<put-attribute name="header" value="/WEB-INF/views/include/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/include/footer.jsp" />
+	</definition>
+
+	<definition name="*" extends="layout">
+		<put-attribute name="content" value="/WEB-INF/views/{1}.jsp" />
+	</definition>
+	
+	<definition name="*/*" extends="layout">
+		<put-attribute name="content" value="/WEB-INF/views/{1}/{2}.jsp" />	
+	</definition>
+	
+	 <definition name="user/login" template="/WEB-INF/views/tiles/default.jsp">
+		<put-attribute name="content" value="/WEB-INF/views/user/login.jsp"/>
+	</definition>
+	
+	
+	<definition name="map/map" extends="mypage_layout">
+		<put-attribute name="content" value="/WEB-INF/views/map/map.jsp"/>
+	</definition>
+	
+	
+	<definition name="map/mobilemap" template="/WEB-INF/views/tiles/default.jsp">
+		<put-attribute name="content" value="/WEB-INF/views/map/mobilemap.jsp"/>
+	</definition>
+	
+
+</tiles-definitions>       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="search.mapper">
+
+	<select id="search" resultType="hp.hpVO">
+
+  <![CDATA[
+		SELECT H.* , ROWNUM no
+		FROM (SELECT ( 6371 * acos( cos( RADIANS(126.8879957) ) * cos( RADIANS(
+		HP_X ) )
+		* cos( RADIANS( HP_Y) - RADIANS(35.1535583) )
+		+ sin( RADIANS(126.8879957) ) * sin( RADIANS( HP_X) ) ) ) AS distanceXY
+		,H.*
+		FROM HP H
+		WHERE
+		hp_name like '%'||#{hp_name}||'%'
+		AND H.sido_name ='광주'
+		order by 1 asc
+		) H
+		WHERE ROWNUM < 100
+   ]]>
+
+	</select>
+	
+	<!-- 리뷰 테이블이 따로 있어서 불러와서 작업  -->
+	<select id="review" resultType="hp.hpVO">
+	
+	SELECT H.* , nvl(r.rv_cnt,0) cnt
+    FROM (
+      SELECT H.* , ROWNUM no
+    	FROM (SELECT ( 6371 * acos( cos( RADIANS(126.8879957) ) * cos( RADIANS(
+      HP_X ) )	* cos( RADIANS( HP_Y) - RADIANS(35.1535583) ) + sin( RADIANS(126.8879957) ) * sin( RADIANS( HP_X) ) ) ) AS distanceXY ,H.*
+		FROM HP H
+		WHERE
+		hp_name like '%'||'내과'||'%' 
+      AND H.sido_name ='광주'
+		order by 1 asc
+		) H
+    ) H LEFT OUTER JOIN ( SELECT HP_CODE , NVL(COUNT(*) ,0) rv_cnt FROM REVIEW  GROUP BY HP_CODE ) R ON h.hp_code = r.hp_code
+			WHERE
+			hp_name like '%'||'내과'||'%'
+      AND H.sido_name ='광주'
+     order by cnt desc
+     
+	</select>
+
+</mapper>

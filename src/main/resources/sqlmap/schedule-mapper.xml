@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="schedule.mapper">
+
+	<insert id="insert">
+		INSERT INTO schedule(user_id, sc_date, sc_title, sc_memo)
+		VALUES (#{user_id}, #{sc_date}, #{sc_title}, #{sc_memo})
+	</insert>
+	
+	<select id="select" resultType="schedule.ScheduleVO">
+		select *
+		from schedule
+		where user_id = #{data}
+	</select>
+
+	<update id="update">
+	  	update schedule set sc_title = #{sc_title}, sc_memo = #{sc_memo}
+	  	where sc_code = #{sc_code}
+	</update>
+	
+	<delete id="delete">
+		delete from schedule
+		where sc_code = #{sc_code}
+	</delete>
+
+</mapper>

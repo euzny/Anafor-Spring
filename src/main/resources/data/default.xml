@@ -30,7 +30,14 @@
 		<!--  여기부분이 있어야 @어노테이션 @qualifier 됩니당; -->
 		<qualifier value="ateam" />
 	</bean>
-	
 
+	<!-- fileUpload 를 위한 bean 설정 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="104857600" />
+		<property name="defaultEncoding" value="utf-8" />
+		<!-- maxUploadSize : 최대 업로드 가능한 바이트 크기 -1은 제한 없음, 기본값이 -1 -->
+		<!-- defaultEncoding : 문자인코딩... 기본값은 ISO-8859-1 코드로 지정 -->
+		
+	</bean>
 </beans>
 

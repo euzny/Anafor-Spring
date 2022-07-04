@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pill.mapper">
+
+	<!-- 약 정보 api 데이터 삽입 -->
+	<insert id="data_insert">
+   insert into drug ( drug_cp, drug_name, drug_code, drug_efcy, drug_use, drug_atpn, drug_se, drug_img)
+   
+   values ( #{drug_cp}, #{drug_name}, #{drug_code}, #{drug_efcy ,jdbcType=CLOB}, #{drug_use ,jdbcType=CLOB}
+   , #{drug_atpn ,jdbcType=CLOB}, #{drug_se ,jdbcType=CLOB}, #{drug_img})
+	</insert>
+	
+	
+
+
+	<insert id= "insert">
+		insert into pill (hp_code, pill_code1, pill_code2, pill_code3, user_id)
+		values (#{hp_code}, #{pill_code1}, #{pill_code2}, #{pill_code3}, #{user_id})
+		
+	</insert>
+
+	<select id="select" resultType="pill.PillVO">
+		<!-- select * 
+		from pill
+		where user_id = #{select} -->
+		
+		select p.*, (select h.hp_name from hp h where h.hp_code = p.hp_code) hp_name 
+		from pill p
+		where user_id = #{user_id}
+		
+		
+	
+	</select>
+	
+	<delete id="delete">
+		delete from pill
+		where pill_code = #{pill_code}
+	</delete>
+	
+
+</mapper>

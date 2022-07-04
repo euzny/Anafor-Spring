@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wuser.mapper">
+
+
+<!-- 회원 가입 정보 DB 저장 -->
+<insert id="join">
+	insert into anafor_user (user_id, user_pw, user_name, user_birth, user_tel, user_gender) values (#{user_id}, #{user_pw}, #{user_name},#{user_birth}, #{user_tel}, #{user_gender})
+
+</insert>
+
+<!-- 회원 정보 업데이트 -->
+<update id="update">
+	update anafor_user set user_name = #{user_name}, user_tel = #{user_tel}, user_pw = #{user_pw}, user_gender = #{user_gender} where user_id = #{user_id}
+
+</update>
+
+<!-- 회원 정보 삭제 -->
+<delete id="delete">
+	delete from anafor_user where user_id = #{id}
+</delete>
+
+<!-- 로그인 기능 -->
+<select id="login" resultType="user.UserVO">
+	select user_id, user_pw, user_name, to_char(user_birth,'YYYYMMdd') user_birth, user_gender, user_tel, user_kakao, user_naver, admin, 
+	 memo, join_date from anafor_user  where user_id = #{user_id} and user_pw = #{user_pw}
+</select>
+
+<!-- 회원 이메일 중복 여부 -->
+<select id="emailchk" resultType="integer">
+		select count(*) from anafor_user
+		where user_id = #{id}
+</select>
+
+<!-- 소셜 회원 정보 입력-->
+<insert id="social_insert">
+	insert into anafor_user (user_id, user_name, user_pw, user_birth, user_tel, user_gender, ${social_type} )
+	values(#{user_id}, #{user_name}, #{user_pw}, #{user_birth,jdbcType=DATE}, #{user_tel,jdbcType=VARCHAR}, #{user_gender}, #{social_id})
+</insert>
+<!-- 소셜 회원 정보 업데이트 -->
+<update id="social_update">
+	update anafor_user set user_name = #{user_name}, user_tel = #{user_tel,jdbcType=VARCHAR}, user_gender = #{user_gender},  user_pw = #{user_pw}
+	where ${social_type} = #{social_id}
+</update>
+<!-- 소셜 회원 존재 여부 조회 -->
+<select id="social_email" resultType="integer">
+			select count(*) from anafor_user
+			where ${social_type} = #{social_id}
+			<!-- ${social_type} 내 들어있는 동적 데이터 (즉, 네이버, 카카오) 를 불러옴 -->
+</select>
+<!-- <select id="list" resultType="notice.NoticeVO">
+	select * 
+	from ( select rownum no, n.*, (select name from member where id = n.writer) name 
+			from (select * from notice <include refid="where_search" />
+			order by root, step desc) n id -> root, step 변경
+			order by no desc )
+	where no between #{beginList} and #{endList}	
+	no 값이 페이지 시작 목록번호와 끝 목록 번호 사이에 있는 값을 조회
+</select> -->
+<!-- 관리자 회원 관리 -->
+<select id="admin_select" resultType="user.UserVO">
+select *
+   from(select rownum no, a.user_id, a.user_name, a.admin, to_char(a.join_date, 'YYYY-MM-DD') join_date, a.memo, 
+   (select count(*) from notice n where a.user_id = n.writer and code='N03' ) qCnt, 
+   (select count(*) from box_review b where a.user_id = b.user_id) brCnt
+    from  (select * from anafor_user <include refid="where_search" /> order by admin, join_date ) a  order by no desc ) 
+   where no between #{beginList} and #{endList} 
+</select>
+
+<!-- 전체 회원 인원 수 조회 -->
+<select id="usertotalList" resultType="integer">
+	select count(*) 
+		from anafor_user <include refid="where_search"/>
+</select>
+
+<!-- 회원 메모 삭제 -->
+<update id="delete_memo">
+	update anafor_user set memo = '' where user_id=#{id}
+</update>
+
+<!-- 회원 메모 저장-->
+<update id="save_memo">
+	update anafor_user set memo = #{memo} where user_id=#{id}
+</update>
+
+<!-- myBatis에서 sql 구문 작성하여 id 참조(include) -->
+<sql id="where_search">
+	<if test="search == 'all'">
+		where user_id like '%'||#{keyword}||'%'
+		or user_name like  '%'||#{keyword}||'%'
+	</if>
+	<if test="search == 'user_id' or search == 'user_name'">
+		where ${search} like '%'||#{keyword}||'%'
+	</if>
+</sql>
+</mapper>

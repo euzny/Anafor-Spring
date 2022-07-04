@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="my_shop.mapper">
+<!-- ============================================================================================================ -->
+
+<select id="list" resultType="web_shop.ShopDetailVO">
+	select * 
+	from shop
+	where user_id = #{user_id}
+</select>
+
+<select id="detail" resultType="web_shop.ShopDetailVO">
+	select * 
+	from shop
+	where id = #{id}
+</select>
+
+<update id="update">
+	update shop set name = #{name}, tel = #{tel}, addr = #{addr}, addr_post = #{addr_post}, coment = #{coment}, cnt = #{cnt}, price = #{price}
+	where id = #{id}
+</update>	
+
+<delete id="cancel">
+	delete 
+	from shop
+	where id = #{id}
+</delete>
+
+</mapper>

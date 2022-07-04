@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app version="2.5" xmlns="http://JAVA.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
@@ -50,4 +50,9 @@
 		<url-pattern>/*</url-pattern>	<!-- 모든 요청에 대해서 이 필터를 거치게 함  -->
 	</filter-mapping>
 	<!-- 한글 깨짐 방지 처리 완성 -->
+	
+	<!-- Session 시간 변경 -->
+	<session-config>
+		<session-timeout>120</session-timeout> <!-- 분 단위 -->
+	</session-config>
 </web-app>

@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hp.mapper">
-
+	
+	<!-- 병원상세조회(카카오맵) -->
 	<select id="detailmap" resultType="hp.Hp_infoVO">
 		select  hp.* ,START_M,END_M,START_T,END_T,
 		START_W,END_W,START_TH,END_TH,START_F,END_F,
@@ -12,7 +13,44 @@
 		left outer join hp_time 
 		on  hp.hp_code = hp_time.hp_code 
 		where hp_name like '%'||#{place_name}||'%' and hp_tel like '%'||#{phone}||'%'
+	</select> 
+
+	
+	<!-- 병원상세조회 -->
+	<select id="detailhp" resultType="hp.Hp_infoVO">
+		select  hp.* ,START_M,END_M,START_T,END_T,
+		START_W,END_W,START_TH,END_TH,START_F,END_F,
+		START_S,END_S,START_SU,END_SU,
+		LUNCH_D,LUNCH_W,CLOSE_SU,CLOSE_HO 
+		from hp
+		left outer join hp_time 
+		on  hp.hp_code = hp_time.hp_code 
+		where hp.hp_code = #{code}
+	</select> 
+
+	<!-- 병원 찜한 여부 확인 -->
+	<select id="checkheart" resultType="user.UserChoiceVO">
+		select * from choice where hp_code = #{hp_code} and user_id = #{user_id} 
 	</select>
-
-
+	
+	<!-- 찜한 병원 insert -->
+	<insert id = "insertheart">
+		insert into choice values(#{user_id}, #{hp_code}, #{ch_date} )
+	</insert>
+	<!-- 찜한 병원 날짜 수정(업데이트) -->
+	<update id = "updateheart">
+		update choice set ch_date = #{ch_date} where user_id = #{user_id} and hp_code = #{hp_code}
+	</update>
+	<!-- 찜한 병원 삭제 -->
+	<delete id="deleteheart">
+		delete from choice where user_id = #{user_id} and hp_code = #{hp_code}
+	</delete>
+	
+	<!-- 찜한 병원 전체 조회 -->
+	<select id="selectheart" resultType="user.UserChoiceVO">
+		select choice.hp_code, user_id, hp_addr, hp_name ,hp_tel,filepath,filename
+		from choice Left outer join hp 
+		on hp.hp_code = choice.hp_code 
+		where user_id=#{user_id} order by ch_date desc
+	</select>
 </mapper>

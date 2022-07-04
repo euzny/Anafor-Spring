@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="my_qna.mapper">
+
+<!-- 게시판 전체 글 목록조회 -->  
+	<select id="myq_list" resultType="my_qna.MyqVO">
+	select * 
+	from (select rownum no, n.*, (select user_name from anafor_user where user_id = n.writer) name  
+	      from (select * 
+	      		from notice  
+	            where root in (select root 
+	            			   from notice
+	                           where code = 'N03'
+	                           and writer = #{writer})
+	                           order by root, step desc) n           
+	   			order by no desc)
+	    where no between #{beginList} and #{endList}
+	</select>
+	
+	<!-- 전체 공지사항 글 수 조회 -->
+	<select id="myq_totalList" resultType="integer">
+		select count(*) 
+		from notice
+		where root in (select root from notice
+					   where code = 'N03'
+			           and writer = #{writer})            
+	</select>	
+
+</mapper>

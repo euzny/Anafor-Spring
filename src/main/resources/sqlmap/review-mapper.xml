@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="review.mapper">
+
+<!-- 리뷰 등록 -->
+<insert id="insert">
+	insert into review(user_id,hp_code,rev_grade,rev_text1,rev_text2,rev_text3,rev_text4,rev_date)
+	 values(#{user_id},#{hp_code},#{rev_grade},#{rev_text1}, #{rev_text2}, #{rev_text3}, #{rev_text4}, #{rev_date})
+</insert>
+
+<!-- 리뷰 전체 조회 -->
+<select id="selectAll" resultType= "review.ReviewVO">
+	select  r.rev_num, r.user_id,r.rev_grade,r.hp_code,r.rev_text1, r.rev_text2, r.rev_text3, r.rev_text4, 
+			to_char(r.rev_date, 'YYYY-MM-DD') rev_date, a.user_name
+	from review r inner join anafor_user a 
+	on r.user_id = a.user_id  
+	where hp_code = #{code} order by rev_num desc
+</select>
+
+<!-- 해당 회원 리뷰 조회 -->
+<select id="selectMy" resultType= "review.ReviewVO">
+	select r.rev_num, r.user_id, r.rev_grade, r.hp_code, r.rev_text1, r.rev_text2, r.rev_text3, r.rev_text4, 
+			to_char(r.rev_date, 'YYYY-MM-DD') rev_date, (select hp_name from hp h where r.hp_code = h.hp_code) hp_name 
+			from review r  where user_id = #{user_id} order by rev_num desc
+</select>
+
+
+<!--해당 회원 리뷰 수정 -->
+<update id="update" >
+	update review 
+	set rev_grade = #{rev_grade}, rev_text1 = #{rev_text1}, rev_text2 = #{rev_text2},
+		rev_text3 = #{rev_text3}, rev_text4 = #{rev_text4}, rev_date = #{rev_date}  
+	where rev_num = #{rev_num}
+</update>
+
+<!-- 해당 회원 리뷰 삭제 -->
+<delete id="delete">
+	delete from review where rev_num = #{rev_num}
+</delete>
+
+<!-- 해당 병원 리뷰 총 개수 별점 등 조회 -->
+<select id="selectTotal" resultType="review.ReviewTotalVO">
+	     select count(rev_num) totalcnt, count(case when rev_text1 = 1 then 0 end) survey1cnt, 
+	     		count(case when rev_text2 = 1 then 0 end) survey2cnt,count(case when rev_text3 = 1 then 0 end) survey3cnt , 
+        		Round(avg(rev_grade),2) totalrate, Round(avg(rev_text1),2) survey1rate, Round(avg(rev_text2),2) survey2rate, 
+        		Round(avg(rev_text3),2) survey3rate
+		from review
+		where hp_code = #{code}
+</select>
+
+
+</mapper>

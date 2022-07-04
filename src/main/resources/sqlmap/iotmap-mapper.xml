@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="iotmap.mapper">
+
+	<!-- 로라 통신으로 받은 GPS DB 저장 -->
+	<insert id="insert">
+	insert into box_gps( user_id, latitude,longitude,gps_date) values( #{user_id}, #{latitude},#{longitude},sysdate)	
+	</insert> 
+
+	<!-- 현재 날짜 기준 3일까지 위치 조회 -->
+	<select id="webSelect" resultType="IoT.GPSVO">
+		select * from box_gps where user_id = #{user_id} and to_char(gps_date,'YYYY-MM-DD') between to_char(sysdate-3,'YYYY-MM-DD') and to_char(sysdate,'YYYY-MM-DD')
+	</select>
+
+	<!-- box_id와 일치하는 user_id검색 -->
+	<select id="findId" resultType="String">
+		select user_id from anafor_user where box_id = #{box_id}
+	</select>
+</mapper>

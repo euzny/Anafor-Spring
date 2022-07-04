@@ -1,13 +1,13 @@
 app/build
 .idea/
 .gradle/
-*/target/*
+target/**
 /bin/
 /test.exe
 .settings/
 src/test/
+/Servers/
+.metadata/
 .classpath
 .project
 .springBeans
-/Servers/
-.metadata/

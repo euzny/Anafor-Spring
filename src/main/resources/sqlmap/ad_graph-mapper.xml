@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ad_graph.mapper">
+
+	<select id="select" resultType="ad_main.graphVO">
+		select *
+		from (SELECT  TO_CHAR(TO_DATE(join_date,'yy/MM/dd')) AS gdate,
+		      COUNT(*) AS cnt 
+		      FROM anafor_user
+		      GROUP BY TO_CHAR(TO_DATE(join_date,'yy/MM/dd'))
+		      ORDER BY gdate)
+		where  gdate between to_char(to_Date(#{lWeek},'yy/MM/dd')) 
+		and to_char(to_Date(#{today},'yy/MM/dd') +1)  
+	</select> 
+
+	<select id="select2" resultType="ad_main.graphVO">
+		select *
+		from (SELECT  TO_CHAR(TO_DATE(order_date,'yy/MM/dd')) AS gdate,
+		      SUM(cnt) AS cnt 
+		      FROM shop
+		      GROUP BY TO_CHAR(TO_DATE(order_date,'yy/MM/dd'))
+		      ORDER BY gdate)
+		where  gdate between to_char(to_Date(#{lWeek},'yy/MM/dd')) 
+		and to_char(to_Date(#{today},'yy/MM/dd') +1)  
+	</select>
+	
+	<select id="select3" resultType="web_shop.ShopDetailVO">
+		select rownum no, name,cnt, to_Char(order_date,'YYYY-MM-dd') order_date from shop where to_char(order_date,'YYYY-MM-DD') = #{date}
+	</select>
+
+	<select id="select4" resultType="web_customer.CustomerVO">
+		select rownum no, writer, title, to_Char(writedate,'YYYY-MM-dd') writedate from notice where to_char(writedate,'YYYY-MM-DD') = #{date} and code= 'N03' and reply='N'
+	</select>
+
+	<select id="select5" resultType="user.UserVO">
+		select rownum no, user_name, user_id, user_gender, to_Char(join_date,'YYYY-MM-dd') join_date from anafor_user where to_char(join_date,'YYYY-MM-DD') = #{date} 
+	</select>
+
+	<!-- 전체 사용자 성별 조회 -->
+	<select id="select6" resultType="ad_main.graphVO">
+		select count(Decode(user_gender ,'남', 1)) male, count(Decode(user_gender ,'여', 1)) female from anafor_user
+	</select>
+
+	<!--  전체 사용자 연령대 조회 -->
+	<select id="select7" resultType="ad_main.graphVO">
+	<![CDATA[	
+		SELECT  
+            count (CASE  WHEN age >= 10 AND age < 30 THEN 1 end) as cnt1
+            ,count (CASE  WHEN age >= 30 AND age < 50 THEN 1 end) as cnt2
+            ,count (CASE  WHEN age >= 50 AND age < 70 THEN 1 end) as cnt3
+            ,count (CASE  WHEN age > 70 THEN 1 end) as cnt4
+          FROM (SELECT  MONTHS_BETWEEN(TRUNC(SYSDATE,'YEAR'),
+                      TRUNC(TO_DATE(to_char(user_birth,'YYYYMMDD'),'YYYYMMDD'),'YEAR')) /12 +1 age
+                FROM anafor_user
+                )
+     ]]>
+	</select>
+</mapper>
+

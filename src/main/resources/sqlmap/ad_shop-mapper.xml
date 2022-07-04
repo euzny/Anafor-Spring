@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ad_order.mapper">
+<!-- =================================================================================================== -->
+<select id="detail" resultType="web_shop.ShopDetailVO">
+	select * 
+	from shop 
+	where id = #{id}
+</select>
+<!-- =================================================================================================== -->
+<select id="totalList" resultType="integer">
+	select count(*) 
+	from shop
+</select>
+<!-- =================================================================================================== -->
+<select id="list" resultType="web_shop.ShopDetailVO">
+	select * from (select s.*, rownum no,(select code_name from type t where t.code = s.code) code_name
+ 	from shop s)
+	where no between #{beginList} and #{endList}
+</select>
+<!-- =================================================================================================== -->
+<update id="update">
+	update shop set code = #{code}
+	where id = #{id}
+</update>
+<!-- =================================================================================================== -->
+
+
+
+
+
+</mapper>

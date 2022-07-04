@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IoT.mapper">
+
+	<insert id="iot_insert">
+		insert INTO IOT_BOX(user_id, memo, case_num, case_time)
+		values (#{user_id}, #{memo}, #{case_num}, #{case_time})
+	</insert>
+	
+	<select id="iot_select" resultType="IoT.IoTVO">
+		select *
+		from IOT_BOX
+		where user_id = #{user_id}
+		order by case_time
+	</select>
+
+	<delete id="iot_delete">
+		delete 
+		from IOT_BOX
+		where no = #{no}
+	</delete>
+	
+	<update id="iot_modify">
+		update IOT_BOX
+		set memo=#{memo}, case_num=#{case_num}, case_time=#{case_time}
+		where no = #{no}
+	</update>
+	
+	<select id="box_id_chk" resultType="integer">
+		select count(*) from anafor_user
+		where box_id = #{box_id}
+	</select>
+
+	<update id="box_id_insert">
+		update anafor_user 
+		set box_id = #{box_id}
+		where user_id = #{user_id}
+	</update>	
+	
+	<update id="update">
+		update IOT_BOX
+		set  pill_chk = 'N'
+		where user_id = #{user_id}
+		and case_num = #{case_num}
+	</update>
+		
+	<select id="iot_recode_select" resultType="IoT.IoTVO">
+		select *
+		from IOT_BOX
+		where user_id = #{user_id}
+		and pill_chk = 'N'
+	</select>
+	
+	<select id="iot_select_pill" resultType="IoT.IoTVO">
+		select case_num
+		from IOT_BOX
+		where user_id = #{user_id}
+		and pill_chk = 'Y'
+	</select>
+</mapper>

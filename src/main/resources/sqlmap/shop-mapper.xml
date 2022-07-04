@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="order.mapper">
+
+<insert id="insert">
+	insert into shop(id, user_id, name, tel, addr, addr_post, coment, code, cnt, price)
+	values( #{id}, #{user_id}, #{name}, #{tel}, #{addr}, #{addr_post}, #{coment, jdbcType=VARCHAR}, 'so0', #{cnt}, #{price})
+</insert>
+
+</mapper>

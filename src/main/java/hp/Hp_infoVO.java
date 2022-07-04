@@ -2,11 +2,28 @@ package hp;
 
 public class Hp_infoVO {
     // 병원정보
- String hp_code, hp_name, type_code, sido_code, sido_name, sigungu_code , sigungu_name, hp_addr , hp_tel, hp_url, hp_x, hp_y;
+ String hp_code, hp_name, type_code, hp_addr , hp_tel, hp_url, hp_x, hp_y, filename, filepath;
  //진료시간정보
  String start_m, end_m, start_t, end_t, start_w, end_w, start_th, end_th, start_f, end_f, start_s, end_s, start_su, end_su,  lunch_d, lunch_w, close_su, close_ho;
 
-    public String getHp_code() {
+ 
+	public String getFilename() {
+		return filename;
+	}
+	
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+	
+	public String getFilepath() {
+		return filepath;
+	}
+	
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
+
+	public String getHp_code() {
         return hp_code;
     }
 
@@ -28,38 +45,6 @@ public class Hp_infoVO {
 
     public void setType_code(String type_code) {
         this.type_code = type_code;
-    }
-
-    public String getSido_code() {
-        return sido_code;
-    }
-
-    public void setSido_code(String sido_code) {
-        this.sido_code = sido_code;
-    }
-
-    public String getSido_name() {
-        return sido_name;
-    }
-
-    public void setSido_name(String sido_name) {
-        this.sido_name = sido_name;
-    }
-
-    public String getSigungu_code() {
-        return sigungu_code;
-    }
-
-    public void setSigungu_code(String sigungu_code) {
-        this.sigungu_code = sigungu_code;
-    }
-
-    public String getSigungu_name() {
-        return sigungu_name;
-    }
-
-    public void setSigungu_name(String sigungu_name) {
-        this.sigungu_name = sigungu_name;
     }
 
     public String getHp_addr() {
